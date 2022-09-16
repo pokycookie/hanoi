@@ -1,1 +1,1 @@
-# Tower of hanoi
+# [Tower of hanoi](https://pokycookie.github.io/hanoi)
