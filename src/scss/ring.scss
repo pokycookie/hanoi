@@ -1,0 +1,11 @@
+.ring {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .element {
+    height: 30px;
+    background-color: rebeccapurple;
+  }
+}

@@ -1,9 +1,11 @@
+export type TZone = 0 | 1 | 2;
+
 export interface IMove {
-  start: number;
-  end: number;
+  start: TZone;
+  end: TZone;
 }
 
-export const hanoi = (n: number, start: number, end: number, via: number) => {
+export const hanoi = (n: number, start: TZone, end: TZone, via: TZone) => {
   const result: IMove[] = [];
   if (n < 0) return result;
   if (n === 1) {
