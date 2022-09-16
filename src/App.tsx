@@ -1,4 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useRef, useState } from "react";
+import Counter from "./counter";
 import { hanoi, IMove, TZone } from "./hanoi";
 import Ring from "./ring";
 import "./scss/app.scss";
@@ -22,9 +25,8 @@ function App() {
 
   const tower = useRef<HTMLDivElement>(null);
 
-  const countHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value !== "") setCount(parseInt(value));
+  const countHandler = (value: number) => {
+    setCount(value);
   };
 
   const resizeHandler = () => {
@@ -90,8 +92,7 @@ function App() {
 
   return (
     <div className="App">
-      <Test />
-      <input type="number" min={1} max={17} value={count} onChange={countHandler} />
+      <Counter min={1} max={17} onChange={(value) => countHandler(value)} />
       <div className="towerArea" ref={tower} onWheel={wheelHandler}>
         <div className="area A"></div>
         <div className="area B"></div>
@@ -101,11 +102,15 @@ function App() {
         })}
       </div>
       <div className="stepController">
-        <button onClick={prevHandler}>prev</button>
+        <button onClick={prevHandler}>
+          <FontAwesomeIcon icon={faAngleLeft} />
+        </button>
         <p>
           {step}/{pathData.length}
         </p>
-        <button onClick={nextHandler}>next</button>
+        <button onClick={nextHandler}>
+          <FontAwesomeIcon icon={faAngleRight} />
+        </button>
       </div>
     </div>
   );
