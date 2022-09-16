@@ -1,4 +1,9 @@
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDoubleRight,
+  faAngleLeft,
+  faAngleRight,
+  faCircleInfo,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import Counter from "./counter";
@@ -13,7 +18,7 @@ const C = 2;
 export interface IRing {
   size: number;
   floor: number;
-  tower: 0 | 1 | 2;
+  tower: TZone;
 }
 
 function App() {
@@ -22,6 +27,8 @@ function App() {
   const [pathData, setPathData] = useState<IMove[]>([]);
   const [width, setWidth] = useState(0);
   const [step, setStep] = useState(0);
+  const [start, setStart] = useState<TZone>(A);
+  const [end, setEnd] = useState<TZone>(C);
 
   const tower = useRef<HTMLDivElement>(null);
 
@@ -80,19 +87,63 @@ function App() {
 
   // Set pathData
   useEffect(() => {
-    const result = hanoi(count, A, C, B);
+    const via = [A, B, C].filter((e) => e !== start && e !== end);
+    const result = hanoi(count, start, end, via[0] as TZone);
     setPathData(result);
+    console.log(result);
     const tempArr: IRing[] = [];
     for (let i = 0; i < count; i++) {
-      tempArr.push({ size: i, floor: i, tower: A });
+      tempArr.push({ size: i, floor: i, tower: start });
     }
     setRingData(tempArr);
     setStep(0);
-  }, [count]);
+  }, [count, start, end]);
 
   return (
     <div className="App">
-      <Counter min={1} max={17} onChange={(value) => countHandler(value)} />
+      <div className="tip">
+        <FontAwesomeIcon icon={faCircleInfo} />
+        <p>마우스 스크롤을 이용해 진행상황을 빠르게 넘길 수 있습니다.</p>
+      </div>
+      <div className="info">
+        <p>Tower of Hanoi</p>
+        <ul>
+          <li>타워의 가장 위에 있는 원반만 옮길 수 있다.</li>
+          <li>한 번에 하나의 원반만 옮길 수 있다.</li>
+          <li>자신보다 작은 원반 위로는 이동할 수 없다.</li>
+        </ul>
+      </div>
+      <div className="controller">
+        <div className="left">
+          <p className="label">링의 개수: </p>
+          <Counter min={1} max={17} onChange={(value) => countHandler(value)} />
+        </div>
+        <div className="right">
+          <select value={start} onChange={(e) => setStart(parseInt(e.target.value) as TZone)}>
+            {[0, 1, 2]
+              .filter((element) => element !== end)
+              .map((element) => {
+                return (
+                  <option key={element} value={element}>
+                    {["A", "B", "C"][element]}
+                  </option>
+                );
+              })}
+          </select>
+          <FontAwesomeIcon className="icon" icon={faAngleDoubleRight} />
+          <select value={end} onChange={(e) => setEnd(parseInt(e.target.value) as TZone)}>
+            {[0, 1, 2]
+              .filter((element) => element !== start)
+              .map((element) => {
+                return (
+                  <option key={element} value={element}>
+                    {["A", "B", "C"][element]}
+                  </option>
+                );
+              })}
+          </select>
+        </div>
+      </div>
       <div className="towerArea" ref={tower} onWheel={wheelHandler}>
         <div className="area A"></div>
         <div className="area B"></div>
@@ -117,27 +168,6 @@ function App() {
 }
 
 export default App;
-
-function Test() {
-  const ref = useRef<number>(0);
-  const [time, setTime] = useState(0);
-
-  const animation = (t: DOMHighResTimeStamp) => {
-    if (t < 1000 * 10) {
-      setTime(Math.floor(t / 1000));
-      ref.current = requestAnimationFrame(animation);
-    } else {
-      setTime(0);
-    }
-  };
-
-  useEffect(() => {
-    ref.current = requestAnimationFrame(animation);
-    return () => cancelAnimationFrame(ref.current);
-  });
-
-  return <p>{time}</p>;
-}
 
 function getTopOfTower(arr: IRing[], tower: TZone) {
   const sorted = arr.filter((e) => e.tower === tower).sort((prev, next) => next.floor - prev.floor);

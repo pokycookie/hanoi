@@ -47,15 +47,17 @@ export default function Counter(props: IProps) {
 
   return (
     <div className="counter">
-      <button onClick={upValue}>
-        <FontAwesomeIcon icon={faCaretUp} />
-      </button>
       <div className="indicators" onWheel={scrollHandler}>
         <p>{value}</p>
       </div>
-      <button onClick={downValue}>
-        <FontAwesomeIcon icon={faCaretDown} />
-      </button>
+      <div className="btnArea">
+        <button onClick={upValue}>
+          <FontAwesomeIcon icon={faCaretUp} />
+        </button>
+        <button onClick={downValue}>
+          <FontAwesomeIcon icon={faCaretDown} />
+        </button>
+      </div>
     </div>
   );
 }
