@@ -1,7 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .App {
   width: 100vw;
+  max-width: 1000px;
   height: 100vh;
   display: flex;
   flex-direction: column;
